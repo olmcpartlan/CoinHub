@@ -1,4 +1,4 @@
-package com.eoghancorp.homebase;
+package com.eoghancorp.homebase.Users;
 
 import com.eoghancorp.homebase.Users.UserController;
 import org.junit.jupiter.api.Test;

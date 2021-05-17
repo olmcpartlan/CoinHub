@@ -15,7 +15,7 @@ public class DbConnection {
     private static final String mySqlUrl = "jdbc:mysql://127.0.0.1:3306/coinhub";
 
     private static final String userName = "root";
-    private static final String userPass = "";
+    private static final String userPass = "naltrapcm";
 
     public void setConn(Connection conn) {
         this.conn = conn;

@@ -8,13 +8,27 @@ import java.util.Date;
 
 public class User {
     // public String ObjectId;
-    public String userId;
-    public String userName;
-    public String email;
-    public String pass;
-    public Timestamp createdAt;
-    public Timestamp updatedAt;
+    public String       userId;
+    public String       userName;
+    public String       email;
+    public String       pass;
+    public Timestamp    createdAt;
+    public Timestamp    updatedAt;
 
+    // Used mainly for tests. Other method is called when sending POST request.
+    public User(String user_name, String password, String user_email) {
+        userId      = java.util.UUID.randomUUID().toString();
+        pass        = password;
+        email       = user_email;
+        userName    = user_name;
+
+        createdAt   = getDateString();
+        updatedAt   = getDateString();
+
+        // Other fields are provided by the POST request.
+    }
+
+    // When the user is created from the POST request, these fields need to be created before-hand.
     public User() {
         userId      = java.util.UUID.randomUUID().toString();
         createdAt   = getDateString();
@@ -23,6 +37,7 @@ public class User {
         // Other fields are provided by the POST request.
     }
 
+    // Parses the Date object into a more sql-friendly timestamp.
     private Timestamp getDateString() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
@@ -68,53 +83,31 @@ public class User {
         System.out.println("Updated At: " + this.getUpdatedAt() + "\n\n");
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserId() { return this.userId; }
+
+    public String getUserName() { return this.userName; }
+
+    public String getEmail() { return this.email; }
+
+    public String getPass() { return this.pass; }
+
+    public Date getCreatedAt() { return this.createdAt; }
+
+    public Date getUpdatedAt() { return this.updatedAt; }
+
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public void setUserName(String userName) { this.userName = userName; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public void setPass(String new_pass) {
+        this.pass = new_pass;
     }
 
-    public String getUserName() {
-        return userName;
-    }
+    public void setCreatedAt(Date createdAt) { this.createdAt = this.getDateString(); }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = this.getDateString();
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = this.getDateString();
-    }
+    public void setUpdatedAt(Date updatedAt) { this.updatedAt = this.getDateString(); }
 
 
 
