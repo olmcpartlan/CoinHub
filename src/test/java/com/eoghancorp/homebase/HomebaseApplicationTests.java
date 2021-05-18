@@ -38,6 +38,7 @@ class HomebaseApplicationTests {
 	void createUser() {
 	    // User is created in the constructor, but the password is encrypted after.
 
+        // TODO: This should probably be done automatically.
 		this.user.encryptPassword();
 		this.user.printUser();
 

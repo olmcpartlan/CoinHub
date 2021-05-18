@@ -41,28 +41,33 @@ class Login extends Component {
   validateUsername = (e) => {
     this.setState({
       username: e.target.value,
-      showUsernameValidation: e.target.value.length > 3 ? true : false
+      showUsernameValidation: e.target.value.length > 3 ? false : true
     })
   }
 
   validatePassword = (e) => {
     this.setState({
       password: e.target.value,
-      showPasswordValidation: e.target.value.length > 3 ? true : false
+      showPasswordValidation: e.target.value.length > 3 ? false : true
     })
 
   }
 
   submit = (e) => {
+
+    let body = JSON.stringify({
+      userName: this.state.username,
+      pass: this.state.password
+    }) 
+
+    console.log(body);
+
     fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        userName:   this.state.userName,
-        pass:       this.state.password,
-      }) 
+      body: body
     }) 
       .then(res => res.text())
       .then(res => {

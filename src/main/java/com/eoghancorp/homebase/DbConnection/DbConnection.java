@@ -50,21 +50,24 @@ public class DbConnection {
 
     public User getUser(String userName) {
         try {
-            Statement statement = conn.createStatement();
-            results = statement.executeQuery("SELECT * FROM users;");
+            this.statement = conn.createStatement();
+            String select_statement = String.format("SELECT * FROM users WHERE user_name = '%s';", userName);
+            results = this.statement.executeQuery(select_statement);
+
+            System.out.println("STATEMENT: " + select_statement);
 
             while(results.next()) {
-                String userId = results.getString("user_name");
+                String userId = results.getString("user_id");
                 System.out.println("Found user_id: " + userId);
+                System.out.println("\n\n");
             }
 
         }
-        catch(SQLException e) {
+        catch(Exception e) {
             System.out.println("There was an exception while getting the selected User.");
             System.out.println(e.getMessage());
         }
 
-        return new User();
     }
 
     public Boolean createUser(User user) {

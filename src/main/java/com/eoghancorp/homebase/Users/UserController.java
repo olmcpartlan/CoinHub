@@ -3,6 +3,8 @@ package com.eoghancorp.homebase.Users;
 import com.eoghancorp.homebase.DbConnection.DbConnection;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 public class UserController {
@@ -25,12 +27,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public static String loginUser(@RequestBody String userName, @RequestBody String pass) {
+    public static String loginUser(@RequestBody Map<String, String> request_body) {
         DbConnection db = new DbConnection();
+
+        System.out.println("\n\n");
+        System.out.println(String.format("User: \t", request_body.get("userName")));
+        System.out.println("\n\n");
 
         db.createConnection();
 
-        User foundUser = db.getUser(userName);
+        User foundUser = db.getUser(request_body.get("userName"));
 
         db.closeConnection();
 
