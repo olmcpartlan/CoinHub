@@ -69,7 +69,7 @@ class Login extends Component {
       },
       body: body
     }) 
-      .then(res => res.text())
+      .then(res => res.json())
       .then(res => {
         console.log(res);
       })

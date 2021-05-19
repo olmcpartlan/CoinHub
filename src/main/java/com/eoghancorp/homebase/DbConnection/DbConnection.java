@@ -56,17 +56,22 @@ public class DbConnection {
 
             System.out.println("STATEMENT: " + select_statement);
 
-            while(results.next()) {
-                String userId = results.getString("user_id");
-                System.out.println("Found user_id: " + userId);
-                System.out.println("\n\n");
-            }
 
+            while(results.next()) {
+                System.out.println("Pulling data for user: " + results.getString("user_name"));
+                return new User(
+                        results.getString("user_name"),
+                        results.getString("user_pass"),
+                        results.getString("user_email")
+                );
+            }
         }
         catch(Exception e) {
             System.out.println("There was an exception while getting the selected User.");
             System.out.println(e.getMessage());
         }
+
+        return new User("NO_USER_FOUND", null, null);
 
     }
 
@@ -77,11 +82,11 @@ public class DbConnection {
             String insertStatement = String.format("INSERT INTO " +
                     "users(user_id, user_name, user_email, user_pass, created_at, updated_at) " +
                     "VALUES('%s', '%s', '%s', '%s', '%s', '%s')",
-                    user.userId, user.userName, user.email, user.pass, user.createdAt, user.updatedAt );
+                    user.getUserId(), user.getUserName(), user.getEmail(),
+                    user.getPass(), user.getCreatedAt(), user.getUpdatedAt()
+            );
 
-            System.out.println("*****\n\n");
-            System.out.println(insertStatement);
-            System.out.println("\n*****\n");
+            System.out.println(String.format("Inserting user %s was successful.", user.getUserId()));
 
             return this.statement.execute(insertStatement);
         }

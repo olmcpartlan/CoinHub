@@ -8,12 +8,12 @@ import java.util.Date;
 
 public class User {
     // public String ObjectId;
-    public String       userId;
-    public String       userName;
-    public String       email;
-    public String       pass;
-    public Timestamp    createdAt;
-    public Timestamp    updatedAt;
+    private String       userId;
+    private String       userName;
+    private String       email;
+    private String       pass;
+    private Timestamp    createdAt;
+    private Timestamp    updatedAt;
 
     // Used mainly for tests. Other method is called when sending POST request.
     public User(String user_name, String password, String user_email) {
@@ -21,7 +21,6 @@ public class User {
         pass        = password;
         email       = user_email;
         userName    = user_name;
-
         createdAt   = getDateString();
         updatedAt   = getDateString();
 
@@ -37,33 +36,22 @@ public class User {
         // Other fields are provided by the POST request.
     }
 
-    // Parses the Date object into a more sql-friendly timestamp.
-    private Timestamp getDateString() {
-        Date date = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return new Timestamp(cal.getTimeInMillis());
-    }
-
-    public String encryptPassword() {
+    public static String encryptPassword(String inputPassword) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("SHA");
 
-            byte[] bytes = this.getPass().getBytes();
+            byte[] bytes = inputPassword.getBytes();
             md.reset();
 
             byte[] digestedByes = md.digest(bytes);
             StringBuffer sb = new StringBuffer();
-            for(int i = 0; i < digestedByes.length; i++) {
-                // TODO: what
-                sb.append(Integer.toHexString(0xff & digestedByes[i]));
+            for (int i = 0; i < md.digest().length; i++) {
+                if ((digestedByes[i] & 0xff) < 0x10) {
+                    sb.append("0");
+                }
+
+                sb.append(Long.toString(digestedByes[i] & 0xff, 16));
             }
-
-            this.setPass(sb.toString());
-
-            System.out.println("Encrypted Password: " + sb.toString());
 
             return sb.toString();
         }
@@ -74,6 +62,17 @@ public class User {
 
         return "an error occurred";
     }
+
+    // Parses the Date object into a more sql-friendly timestamp.
+    private Timestamp getDateString() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return new Timestamp(cal.getTimeInMillis());
+    }
+
 
     public void printUser() {
         System.out.println("\n\nUserId:     " + this.getUserId());

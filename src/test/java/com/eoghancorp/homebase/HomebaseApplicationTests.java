@@ -39,11 +39,11 @@ class HomebaseApplicationTests {
 	    // User is created in the constructor, but the password is encrypted after.
 
         // TODO: This should probably be done automatically.
-		this.user.encryptPassword();
+		User.encryptPassword(this.user.getPass());
 		this.user.printUser();
 
 		// Want to make sure that when encryptPassword() is called, only the encrypted password is attached to the record.
-		Assertions.assertNotEquals(this.getUser().pass, "S0m3S3cur3DP$55");
+		Assertions.assertNotEquals(this.getUser().getPass(), "S0m3S3cur3DP$55");
 
 	}
 
