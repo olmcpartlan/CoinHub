@@ -1,7 +1,6 @@
 package com.eoghancorp.homebase.Users;
 
 import com.eoghancorp.homebase.DbConnection.DbConnection;
-import com.mongodb.assertions.Assertions;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -16,29 +15,17 @@ public class UserController {
         // TODO: Can't set this in the constructor because password field has not been set.
         user.setPass(User.encryptPassword(user.getPass()));
 
-        DbConnection db = new DbConnection();
-        db.createConnection();
-        if(db.createConnection()) {
-            System.out.println("connection's fine.");
+        UserMethods userMethods = new UserMethods();
 
-            db.createUser(user);
-            db.closeConnection();
-        }
+        userMethods.createUser(user);
 
         return "done";
     }
 
     @PostMapping("/login")
     public static User loginUser(@RequestBody Map<String, String> request_body) {
-        DbConnection db = new DbConnection();
-
-        db.createConnection();
-
         // Find the user with the matching username.
-        User foundUser = db.getUser(request_body.get("userName"));
-
-        // After finding the user, no longer need the db connection.
-        db.closeConnection();
+        User foundUser = new UserMethods().getUser(request_body.get("userName"));
 
         // If the provided username cannot be found, don't try to check password input.
         if(foundUser.getPass() == null)

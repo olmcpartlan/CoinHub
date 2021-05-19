@@ -78,6 +78,7 @@ public class User {
         System.out.println("\n\nUserId:     " + this.getUserId());
         System.out.println("UserName:   " + this.getUserName());
         System.out.println("Email:      " + this.getEmail());
+        System.out.println("Password:   " + this.getPass());
         System.out.println("Created At: " + this.getCreatedAt());
         System.out.println("Updated At: " + this.getUpdatedAt() + "\n\n");
     }
