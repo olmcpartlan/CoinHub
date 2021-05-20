@@ -63,7 +63,7 @@ public class User {
         return "an error occurred";
     }
 
-    // Parses the Date object into a more sql-friendly timestamp.
+    // Converts the Date object into a more sql-friendly timestamp.
     private Timestamp getDateString() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();

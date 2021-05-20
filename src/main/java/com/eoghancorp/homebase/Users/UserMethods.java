@@ -15,6 +15,9 @@ public class UserMethods {
 
             User foundUser = DbConnection.executeSelect(select_statement);
 
+            foundUser.printUser();
+
+
             /* -- Hoping I will be able to delete this.
             while(results.next()) {
                 System.out.println("Pulling data for user: " + results.getString("user_name"));
@@ -30,6 +33,7 @@ public class UserMethods {
             System.out.println("There was an exception while getting the selected User.");
             System.out.println(e.getMessage());
         }
+
 
         return new User("NO_USER_FOUND", null, null);
 

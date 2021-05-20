@@ -34,8 +34,8 @@ class UserEntryTests {
         // User is created in the constructor, but the password is encrypted after.
 
         // TODO: This should probably be done automatically.
-        user.setPass(User.encryptPassword(this.user.getPass()));
-        this.user.printUser();
+        String pass = User.encryptPassword(this.user.getPass());
+        user.setPass(pass);
 
         // Want to make sure that when encryptPassword() is called, only the encrypted password is attached to the record.
         Assertions.assertNotEquals(this.getUser().getPass(), "S0m3S3cur3DP$55");
@@ -46,10 +46,13 @@ class UserEntryTests {
     @Test
     @DisplayName("C. Insert User into MySQL")
     void insertUser() {
-        try
-        {
+        try {
+            this.user.printUser();
             UserMethods methods = new UserMethods();
-            methods.createUser(this.getUser());
+
+            methods.createUser(this.user);
+
+
         }
         catch(Exception e) {
         System.out.println("***** UNABLE TO CREATE CONNECTION TO MySQL ******");
@@ -64,6 +67,7 @@ class UserEntryTests {
     void loginUser() {
         UserMethods methods = new UserMethods();
         User foundUser = methods.getUser(this.user.getUserName());
+        foundUser.printUser();
 
         Assertions.assertEquals(this.user.getPass(), foundUser.getPass());
     }

@@ -1,5 +1,6 @@
 package com.eoghancorp.homebase.DbConnection;
 
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.UUID;
 import java.util.UUID.*;
@@ -41,8 +42,34 @@ public class DbConnection {
         return false;
     }
 
-    public static < E > E executeSelect(String selectStatement) {
-        // TODO: everything
+    public static <E> E executeSelect(String selectStatement) {
+        try {
+            Connection conn = createConnection(DbConstants.mySqlUrl, DbConstants.userName, DbConstants.userPass);
+            Statement statement = conn.createStatement();
+
+            ResultSet result = statement.executeQuery(selectStatement);
+            // Column data, types, field names, ...
+            ResultSetMetaData metadata = result.getMetaData();
+
+            while(result.next()) {
+                // Loop each column and pull the field type from the db resultset.
+                for (int i = 1; i < metadata.getColumnCount(); i++) {
+                    int columnType = metadata.getColumnType(i);
+
+                    System.out.println(metadata.getColumnType(i));
+
+                }
+            }
+
+        }
+
+
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("error");
+        }
+
+
         return null;
     }
 
@@ -69,9 +96,11 @@ public class DbConnection {
 
 }
 
+
 // These should probably go into a config file. not important right now.
 class DbConstants {
     static String mySqlUrl = "jdbc:mysql://127.0.0.1:3306/coinhub";
     static String userName = "root";
-    static String userPass = "naltrapcm";
+    // static String userPass = "naltrapcm";
+    static String userPass = "";
 }
