@@ -36,6 +36,8 @@ public class User {
         // Other fields are provided by the POST request.
     }
 
+    public User(boolean initializeFields) { }
+
     public static String encryptPassword(String inputPassword) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");

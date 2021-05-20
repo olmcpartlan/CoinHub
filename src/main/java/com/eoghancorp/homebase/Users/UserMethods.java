@@ -4,6 +4,7 @@ import com.eoghancorp.homebase.DbConnection.DbConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.*;
 
 public class UserMethods {
 
@@ -13,10 +14,20 @@ public class UserMethods {
 
             System.out.println("STATEMENT: " + select_statement);
 
-            User foundUser = DbConnection.executeSelect(select_statement);
+            List<Object> userFields = DbConnection.executeSelect(select_statement);
+
+            // We don't want to generate a new unique id. Going to pull from the
+            // db ResultSet instead.
+            User foundUser = new User(false);
+
+            foundUser.setUserId(    userFields.get(0).toString());
+            foundUser.setUserName(  userFields.get(1).toString());
+            foundUser.setEmail(     userFields.get(2).toString());
+            foundUser.setPass(      userFields.get(3).toString());
 
             foundUser.printUser();
 
+            return foundUser;
 
             /* -- Hoping I will be able to delete this.
             while(results.next()) {
