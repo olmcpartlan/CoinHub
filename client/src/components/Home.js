@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 
 /*
 
@@ -8,7 +9,6 @@ import React, { Component } from 'react';
       - Java server validates users.
       - Homgo db? MySQL?
 
-      
 
 */
 
@@ -18,6 +18,7 @@ export default class Home extends Component {
     return (
       <div>
         <p>Home Compnent.</p>
+        <Button>a button</Button>
       </div>
 
     )

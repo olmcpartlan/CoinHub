@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import { far, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 export default class UserLogin extends Component {
@@ -18,8 +19,13 @@ export default class UserLogin extends Component {
             <p >Let's Get Started</p>
           </Row>
           <Row>
-            <Login/>
+            <Login 
+              setuserid={this.props.setuserid} 
+              setusername={this.props.setusername} 
+            />
+
             <Register/>
+
           </Row>
         </Container>
       </div>
@@ -35,6 +41,7 @@ class Login extends Component {
       password: "",
       showUsernameValidation: false,
       showPasswordValidation: false,
+      userLoggedIn: false
     }
   }
 
@@ -60,7 +67,7 @@ class Login extends Component {
       pass: this.state.password
     }) 
 
-    console.log(body);
+    // console.log(body);
 
     fetch("/login", {
       method: "POST",
@@ -72,9 +79,19 @@ class Login extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
+
+        if(res["userId"] !== "NO_USER_FOUND") {
+          this.setState({ userLoggedIn: true });
+          this.props.setuserid(res["userId"]);
+          this.props.setusername(res["userName"]);
+
+        }
+
+        else {
+          console.log("user was not found. cannot login");
+        }
+
       })
-
-
   }
 
   render() {
@@ -96,23 +113,24 @@ class Login extends Component {
           <FormControl
             placeholder="Password"
             aria-label="Password"
+            type="password"
             aria-describedby="basic-addon1"
             onChange={this.validatePassword}
           />
         </InputGroup>
 
-        <Button 
-          className="login-button" 
-          onClick={this.submit}
-          variant="primary" 
-        >
-          Login
+        <Link to={this.state.userLoggedIn ? "/" : "/login"} >
+          <Button
+            className="login-button"
+            onClick={this.submit}
+            variant="primary"
+          >
+            Login
         </Button>
+        </Link>
       </Col>
     );
   }
-
-            
 }
 
 class Register extends Component {
@@ -132,12 +150,6 @@ class Register extends Component {
 
 
   submit = () => {
-    console.log(
-      JSON.stringify({
-        userName:   this.state.input_userName,
-        email:      this.state.input_email,
-        pass:       this.state.input_pass,
-      }));
     fetch("/create", {
       method: "POST",
       headers: {
@@ -153,7 +165,6 @@ class Register extends Component {
       .then(res => {
         console.log(res);
       })
-
   }
 
   validateEmail = (e) => {

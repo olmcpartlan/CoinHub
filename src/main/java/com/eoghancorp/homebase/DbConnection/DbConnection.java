@@ -56,7 +56,6 @@ public class DbConnection {
             while(result.next()) {
                 // Loop each column and pull the field type from the db resultset.
                 for (int i = 1; i < metadata.getColumnCount(); i++) {
-
                     Object obj = result.getObject(i);
                     classes.add(obj);
                 }
@@ -66,12 +65,10 @@ public class DbConnection {
 
         }
 
-
         catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("error");
         }
-
 
         return null;
     }
@@ -104,6 +101,6 @@ public class DbConnection {
 class DbConstants {
     static String mySqlUrl = "jdbc:mysql://127.0.0.1:3306/coinhub";
     static String userName = "root";
-    static String userPass = "naltrapcm";
-    // static String userPass = "";
+    // static String userPass = "naltrapcm";
+    static String userPass = "";
 }
