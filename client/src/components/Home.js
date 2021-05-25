@@ -14,11 +14,16 @@ import { Button } from 'react-bootstrap';
 
 
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+
+  }
+
   render() {
     return (
       <div>
         <p>Home Compnent.</p>
-        <Button>a button</Button>
+        <Button onClick={this.props.updateHistory}>a button</Button>
       </div>
 
     )

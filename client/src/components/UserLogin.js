@@ -7,10 +7,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import { far, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 
 
-export default class UserLogin extends Component {
+
+class UserLogin extends Component {
   render() {
     return (
       <div>
@@ -22,9 +23,14 @@ export default class UserLogin extends Component {
             <Login 
               setuserid={this.props.setuserid} 
               setusername={this.props.setusername} 
+              history={this.props.history}
             />
 
-            <Register/>
+            <Register
+              setuserid={this.props.setuserid} 
+              setusername={this.props.setusername} 
+              history={this.props.history}
+            />
 
           </Row>
         </Container>
@@ -32,6 +38,8 @@ export default class UserLogin extends Component {
     );
   }
 }
+
+export default withRouter(UserLogin);
 
 class Login extends Component {
   constructor(props) {
@@ -41,7 +49,9 @@ class Login extends Component {
       password: "",
       showUsernameValidation: false,
       showPasswordValidation: false,
-      userLoggedIn: false
+      userLoggedIn: false,
+      emailValidationMessage: "",
+      passValidationMessage: "",
     }
   }
 
@@ -67,8 +77,6 @@ class Login extends Component {
       pass: this.state.password
     }) 
 
-    // console.log(body);
-
     fetch("/login", {
       method: "POST",
       headers: {
@@ -80,15 +88,20 @@ class Login extends Component {
       .then(res => {
         console.log(res);
 
-        if(res["userId"] !== "NO_USER_FOUND") {
+        // Need to set the route from this point, AFTER the correct user has been confirmed.
+        if(res["userName"] === "NO_USER_FOUND") {
+          this.setState({ 
+            passValidationMessage: "Password did not match our records. Would you like to reset it? " ,
+            showPasswordValidation: true
+          })
+        }
+
+        else {
           this.setState({ userLoggedIn: true });
           this.props.setuserid(res["userId"]);
           this.props.setusername(res["userName"]);
 
-        }
-
-        else {
-          console.log("user was not found. cannot login");
+          this.props.history.push("/");
         }
 
       })
@@ -98,6 +111,11 @@ class Login extends Component {
     return (
       <Col className="login-col">
         <h4>Login</h4>
+        {this.state.showPasswordValidation && (
+          <span className="login-validation-message">
+            {this.state.passValidationMessage}
+          </span>
+        )}
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
@@ -119,14 +137,15 @@ class Login extends Component {
           />
         </InputGroup>
 
-        <Link to={this.state.userLoggedIn ? "/" : "/login"} >
+        {/* ugh */}
+        <Link to={this.state.userLoggedIn ? "/" : "/login"}>
           <Button
             className="login-button"
             onClick={this.submit}
             variant="primary"
           >
             Login
-        </Button>
+          </Button>
         </Link>
       </Col>
     );
@@ -161,9 +180,14 @@ class Register extends Component {
         pass:       this.state.input_pass,
       }) 
     }) 
-      .then(res => res.text())
+      .then(res => res.json())
       .then(res => {
+
         console.log(res);
+
+        this.props.setuserid(res["userId"]);
+        this.props.setusername(res["userName"]);
+        this.props.history.push("/");
       })
   }
 

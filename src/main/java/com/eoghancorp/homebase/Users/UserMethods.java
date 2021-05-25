@@ -29,16 +29,6 @@ public class UserMethods {
 
             return foundUser;
 
-            /* -- Hoping I will be able to delete this.
-            while(results.next()) {
-                System.out.println("Pulling data for user: " + results.getString("user_name"));
-                return new User(
-                        results.getString("user_name"),
-                        results.getString("user_pass"),
-                        results.getString("user_email")
-                );
-            }
-            */
         }
         catch(Exception e) {
             System.out.println("There was an exception while getting the selected User.");

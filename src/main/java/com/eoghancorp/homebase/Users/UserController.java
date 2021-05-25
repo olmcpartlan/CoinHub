@@ -10,16 +10,18 @@ import java.util.Map;
 @RestController
 public class UserController {
     @PostMapping("/create")
-    public static String createUser(@RequestBody User user) {
+    public static User createUser(@RequestBody User user) {
 
-        // TODO: Can't set this in the constructor because password field has not been set.
+        // TODO: Can't set this in the constructor because password field has not been set in time.
         user.setPass(User.encryptPassword(user.getPass()));
 
         UserMethods userMethods = new UserMethods();
 
+        // Creating the user returns a boolean so can't pull the fields from here.
         userMethods.createUser(user);
 
-        return "done";
+        return new UserMethods().getUser(user.getUserName());
+
     }
 
     @PostMapping("/login")
