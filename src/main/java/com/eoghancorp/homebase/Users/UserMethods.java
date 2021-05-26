@@ -1,6 +1,7 @@
 package com.eoghancorp.homebase.Users;
 
 import com.eoghancorp.homebase.DbConnection.DbConnection;
+import jdk.jshell.spi.ExecutionControlProvider;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -59,6 +60,25 @@ public class UserMethods {
             System.out.println("There was an exception while creating a user.");
             System.out.println(e.getMessage());
         }
+
+        return false;
+    }
+
+    public static boolean deleteUser(String userName) {
+        try {
+            String deleteStatement = String.format("DELETE FROM users WHERE user_name = '%s'", userName);
+
+            System.out.println(deleteStatement);
+
+            return DbConnection.executeDelete(deleteStatement);
+
+
+        }
+        catch(Exception e) {
+            System.out.println("There was a SQL error deleting user:");
+            System.out.println(e.getMessage());
+        }
+
 
         return false;
     }

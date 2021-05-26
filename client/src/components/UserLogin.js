@@ -39,7 +39,7 @@ class UserLogin extends Component {
   }
 }
 
-// IN ORDER TO NAVIGATE PROGRAMATICALLY, THIS IS REQUIRED.
+// in order to navigate programatically, this is required.
 export default withRouter(UserLogin);
 
 class Login extends Component {
@@ -57,9 +57,11 @@ class Login extends Component {
   }
 
   validateUsername = (e) => {
+    let inputLength = e.target.value.length;
+
     this.setState({
       username: e.target.value,
-      showUsernameValidation: e.target.value.length > 3 ? false : true
+      showUsernameValidation: inputLength > 3 || inputLength !== 0 ? false : true
     })
   }
 
@@ -121,7 +123,10 @@ class Login extends Component {
             )}
 
             {this.state.showUsernameValidation || (
-              <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+              <InputGroup.Text 
+                id="basic-addon1"
+                className="input-icon"
+                >🙋‍♂ </InputGroup.Text>
             )}
           </InputGroup.Prepend>
           <FormControl
@@ -254,6 +259,9 @@ class Register extends Component {
     return (
       <Col className="register-col" md="auto">
         <h4>Register</h4>
+
+        {/* REGISTER USER NAME */}
+
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
@@ -265,6 +273,9 @@ class Register extends Component {
             onChange={this.validateUsername}
           />
         </InputGroup>
+
+        {/* REGISTER EMAIL ADDRESS */}
+
         <InputGroup className="mb-3">
           {this.state.showEmailValidation && (
             <InputGroup.Prepend>
@@ -280,6 +291,10 @@ class Register extends Component {
             onBlur={this.validateEmail}
           />
         </InputGroup>
+
+        {/* still needs more validation work. */}
+        {/* REGISTER PASSWORD */}
+
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Password"
@@ -289,6 +304,9 @@ class Register extends Component {
             onChange={this.validatePassword}
           />
         </InputGroup>
+
+        {/* REGISTER CONFIRM PASSWORD */}
+
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Confirm Password"

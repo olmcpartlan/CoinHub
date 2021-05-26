@@ -92,12 +92,36 @@ public class DbConnection {
 
         return false;
     }
+
+
+    public static Boolean executeDelete(String deleteStatement) {
+        try {
+            Connection conn = createConnection(DbConstants.mySqlUrl, DbConstants.userName, DbConstants.userPass);
+            Statement statement = conn.createStatement();
+
+            Boolean result = statement.execute(deleteStatement);
+            // don't forget to close open connections.
+            closeConnection(conn);
+
+            boolean response = result;
+            System.out.println("WAS USER DELETED: " + response);
+
+            return response;
+        }
+        catch(SQLException e) {
+            System.out.println("There was an exception while deleting a record:");
+            System.out.println("CLASS: " + e.getClass());
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
 }
 
 // These should probably go into a config file. not important right now.
 class DbConstants {
     static String mySqlUrl = "jdbc:mysql://127.0.0.1:3306/coinhub";
     static String userName = "root";
-    static String userPass = "naltrapcm";
-    // static String userPass = "";
+    // static String userPass = "naltrapcm";
+    static String userPass = "";
 }

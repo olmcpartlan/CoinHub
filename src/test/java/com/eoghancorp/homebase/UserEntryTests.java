@@ -7,6 +7,8 @@ import com.eoghancorp.homebase.Users.UserMethods;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.SQLException;
+
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.DisplayName.class)
@@ -24,6 +26,7 @@ class UserEntryTests {
 
     @Test
     @DisplayName("A. Load Context")
+    // TODO: create table if not exists
     void contextLoads() {
         System.out.println("Starting Tests");
     }
@@ -31,13 +34,13 @@ class UserEntryTests {
     @Test
     @DisplayName("B. Create New User")
     void createUser() {
-        // User is created in the constructor, but the password is encrypted after.
+// User is created in the constructor, but the password is encrypted after.
 
-        // TODO: This should probably be done automatically.
+// TODO: This should probably be done automatically.
         String pass = User.encryptPassword(this.user.getPass());
         user.setPass(pass);
 
-        // Want to make sure that when encryptPassword() is called, only the encrypted password is attached to the record.
+// Want to make sure that when encryptPassword() is called, only the encrypted password is attached to the record.
         Assertions.assertNotEquals(this.getUser().getPass(), "S0m3S3cur3DP$55");
 
     }
@@ -52,12 +55,10 @@ class UserEntryTests {
 
             methods.createUser(this.user);
 
-
         }
         catch(Exception e) {
-        System.out.println("***** UNABLE TO CREATE CONNECTION TO MySQL ******");
+            System.out.println("***** UNABLE TO CREATE CONNECTION TO MySQL ******");
             System.out.println(e.getMessage());
-
         }
 
     }
@@ -71,4 +72,18 @@ class UserEntryTests {
 
         Assertions.assertEquals(this.user.getPass(), foundUser.getPass());
     }
+
+    @Test
+    @DisplayName("E. Remove new user from db")
+    void deleteUser() {
+        UserMethods.deleteUser(user.getUserName());
+
+
+        String userName = user.getUserName();
+
+        User foundUser = UserMethods.getUser(userName);
+
+        Assertions.assertEquals(foundUser.getUserName(), "NO_USER_FOUND");
+    }
+
 }
