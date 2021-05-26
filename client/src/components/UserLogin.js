@@ -6,8 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { far, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link, withRouter } from 'react-router-dom';
+import ValidationOverlay from './ValidationOverlay';
 
 
 
@@ -39,7 +40,7 @@ class UserLogin extends Component {
   }
 }
 
-// in order to navigate programatically, this is required.
+// IN ORDER TO NAVIGATE PROGRAMATICALLY, THIS IS REQUIRED.
 export default withRouter(UserLogin);
 
 class Login extends Component {
@@ -51,17 +52,19 @@ class Login extends Component {
       showUsernameValidation: false,
       showPasswordValidation: false,
       userLoggedIn: false,
-      emailValidationMessage: "",
+      userNameValidationMessage: "",
       passValidationMessage: "",
+      submitEnabled: false
     }
   }
 
   validateUsername = (e) => {
-    let inputLength = e.target.value.length;
-
     this.setState({
       username: e.target.value,
-      showUsernameValidation: inputLength > 3 || inputLength !== 0 ? false : true
+      showUsernameValidation: e.target.value.length > 3 ? false : true,
+      userNameValidationMessage: e.target.value.length > 3 
+        ? "User not found in our records."
+        : ""
     })
   }
 
@@ -113,20 +116,20 @@ class Login extends Component {
         {/* LOGIN USER NAME */}
 
         <InputGroup className="mb-3">
+          {/* This is getting a bit cumbeersome, could create separate comp with props for the message. */}
           <InputGroup.Prepend>
             {this.state.showUsernameValidation && (
               <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <FontAwesomeIcon icon={faTimesCircle} color="red" />
-                </InputGroup.Text>
+                <ValidationOverlay
+                  validationMessage={this.state.userNameValidationMessage}
+                />
               </InputGroup.Prepend>
             )}
 
             {this.state.showUsernameValidation || (
-              <InputGroup.Text 
-                id="basic-addon1"
-                className="input-icon"
-                >🙋‍♂ </InputGroup.Text>
+              <InputGroup.Text className="input-icon" id="basic-addon1">
+                🙋‍♂️
+              </InputGroup.Text>
             )}
           </InputGroup.Prepend>
           <FormControl
@@ -151,7 +154,9 @@ class Login extends Component {
           </InputGroup.Prepend>
 
           {this.state.showPasswordValidation || (
-            <InputGroup.Text className="input-icon" id="basic-addon1">🔑</InputGroup.Text>
+            <InputGroup.Text className="input-icon" id="basic-addon1">
+              🔑
+            </InputGroup.Text>
           )}
 
           <FormControl
@@ -166,6 +171,7 @@ class Login extends Component {
         <Link to={this.state.userLoggedIn ? "/" : "/login"}>
           <Button
             className="login-button"
+            disabled={!this.state.submitEnabled}
             onClick={this.submit}
             variant="primary"
           >
@@ -259,9 +265,6 @@ class Register extends Component {
     return (
       <Col className="register-col" md="auto">
         <h4>Register</h4>
-
-        {/* REGISTER USER NAME */}
-
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
@@ -273,9 +276,6 @@ class Register extends Component {
             onChange={this.validateUsername}
           />
         </InputGroup>
-
-        {/* REGISTER EMAIL ADDRESS */}
-
         <InputGroup className="mb-3">
           {this.state.showEmailValidation && (
             <InputGroup.Prepend>
@@ -291,10 +291,6 @@ class Register extends Component {
             onBlur={this.validateEmail}
           />
         </InputGroup>
-
-        {/* still needs more validation work. */}
-        {/* REGISTER PASSWORD */}
-
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Password"
@@ -304,9 +300,6 @@ class Register extends Component {
             onChange={this.validatePassword}
           />
         </InputGroup>
-
-        {/* REGISTER CONFIRM PASSWORD */}
-
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Confirm Password"

@@ -122,6 +122,6 @@ public class DbConnection {
 class DbConstants {
     static String mySqlUrl = "jdbc:mysql://127.0.0.1:3306/coinhub";
     static String userName = "root";
-    // static String userPass = "naltrapcm";
-    static String userPass = "";
+    static String userPass = "naltrapcm";
+    // static String userPass = "";
 }
