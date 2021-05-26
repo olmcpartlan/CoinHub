@@ -16,8 +16,6 @@
   color: white;
 }
 
-
-
 .App-link {
   color: #61dafb;
 }
@@ -34,6 +32,10 @@
 .login-validation-message {
   color: red;
   font-size: 4;
+}
+
+.input-icon {
+  font-size: x-small;
 }
 
 .register-emailValidation {

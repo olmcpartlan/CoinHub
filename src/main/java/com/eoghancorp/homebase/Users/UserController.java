@@ -47,8 +47,5 @@ public class UserController {
             return new User("NO_USER_FOUND", null, null);
         }
 
-
-
     }
-
 }

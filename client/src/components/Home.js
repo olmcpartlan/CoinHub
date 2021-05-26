@@ -7,16 +7,14 @@ import { Button } from 'react-bootstrap';
   - Hooks up to Coinbase account.
   - display user's current coins and transactinos <- MVP
       - Java server validates users.
-      - Homgo db? MySQL?
+      - MySQL?
 
 
 */
 
-
 export default class Home extends Component {
   constructor(props) {
     super(props);
-
   }
 
   render() {
