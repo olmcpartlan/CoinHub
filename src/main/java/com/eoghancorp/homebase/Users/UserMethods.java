@@ -82,4 +82,20 @@ public class UserMethods {
 
         return false;
     }
+
+    public static boolean checkUserName(String userName) {
+        String selectStatement = String.format("SELECT * FROM users WHERE user_name='%s'", userName);
+        try
+        {
+            List<Object> foundUsers = DbConnection.executeSelect(selectStatement);
+
+            if(foundUsers.stream().count() > 0) {
+                return true;
+            }
+
+        }
+        catch(Exception e) {}
+
+        return false;
+    }
 }

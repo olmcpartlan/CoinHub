@@ -46,6 +46,10 @@ public class UserController {
             System.out.println(String.format("The passwords did not match for user %s", foundUser.getUserName()));
             return new User("NO_USER_FOUND", null, null);
         }
+    }
 
+    @GetMapping("/checkusername")
+    public static boolean checkUserName(@RequestParam String userName) {
+       return UserMethods.checkUserName(userName);
     }
 }

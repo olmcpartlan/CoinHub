@@ -59,13 +59,22 @@ class Login extends Component {
   }
 
   validateUsername = (e) => {
+    let inputLength = e.target.value.length;
+
+    // No point trying to find the user if it doesn't meet the min requirements from registering.
+    if(inputLength < 3 ) return;
+
+    fetch(`/checkusername?userName=${this.state.username}`)
+      .then(res => res.text())
+      .then(res => {
+        console.log(res)
+      })
+
+    console.log("on blur called.");
+
     this.setState({
       username: e.target.value,
-      showUsernameValidation: e.target.value.length > 3 ? false : true,
-      userNameValidationMessage: e.target.value.length > 3 
-        ? "User not found in our records."
-        : ""
-    })
+    });
   }
 
   validatePassword = (e) => {
