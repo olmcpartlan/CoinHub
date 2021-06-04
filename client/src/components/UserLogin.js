@@ -61,26 +61,37 @@ class Login extends Component {
   validateUsername = (e) => {
     let inputLength = e.target.value.length;
 
-    // No point trying to find the user if it doesn't meet the min requirements from registering.
+    // don't need to find the user if it doesn't meet the min requirements for registration.
     if(inputLength < 3 ) return;
 
-    fetch(`/checkusername?userName=${this.state.username}`)
-      .then(res => res.text())
+
+    fetch(`/checkusername?userName=${e.target.value}`)
+      .then(res => res.json())
       .then(res => {
-        console.log(res)
+        // Have to do this because it comes back as a string.
+        if(res) this.setState({
+            showUsernameValidation: false,
+            username: e.target.value,
+            // If it's getting to this point, then submit can be enabled if password is validated.
+            submitEnabled: this.state.showPasswordValidation 
+          });
+
+        else this.setState({
+            showUsernameValidation: true,
+            userNameValidationMessage: "Username was not found.",
+            username: e.target.value,
+            submitEnabled: false
+        })
+
       })
-
-    console.log("on blur called.");
-
-    this.setState({
-      username: e.target.value,
-    });
   }
 
   validatePassword = (e) => {
     this.setState({
       password: e.target.value,
-      showPasswordValidation: e.target.value.length > 3 ? false : true
+      showPasswordValidation: e.target.value.length < 3,
+      submitEnabled: e.target.value.length > 3 && this.state.showUsernameValidation
+
     })
 
   }
@@ -108,7 +119,10 @@ class Login extends Component {
           });
         } 
         else {
-          this.setState({ userLoggedIn: true });
+          this.setState({ 
+            userLoggedIn: true,
+          });
+
           this.props.setuserid(res["userId"]);
           this.props.setusername(res["userName"]);
 
@@ -116,6 +130,7 @@ class Login extends Component {
         }
       });
   }
+
 
   render() {
     return (
@@ -125,27 +140,24 @@ class Login extends Component {
         {/* LOGIN USER NAME */}
 
         <InputGroup className="mb-3">
-          {/* This is getting a bit cumbeersome, could create separate comp with props for the message. */}
           <InputGroup.Prepend>
-            {this.state.showUsernameValidation && (
-              <InputGroup.Prepend>
+            {this.state.showUsernameValidation && 
                 <ValidationOverlay
                   validationMessage={this.state.userNameValidationMessage}
                 />
-              </InputGroup.Prepend>
-            )}
+            }
 
-            {this.state.showUsernameValidation || (
+            {this.state.showUsernameValidation || 
               <InputGroup.Text className="input-icon" id="basic-addon1">
                 🙋‍♂️
               </InputGroup.Text>
-            )}
+            }
           </InputGroup.Prepend>
           <FormControl
             placeholder="Username"
             aria-label="Username"
             aria-describedby="basic-addon1"
-            onBlur={this.validateUsername}
+            onChange={this.validateUsername}
           />
         </InputGroup>
 
@@ -153,13 +165,11 @@ class Login extends Component {
 
         <InputGroup>
           <InputGroup.Prepend>
-            {this.state.showPasswordValidation && (
-              <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <FontAwesomeIcon icon={faTimesCircle} color="red" />
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-            )}
+            {this.state.showPasswordValidation && 
+                <ValidationOverlay
+                  validationMessage={this.state.passValidationMessage}
+                />
+            }
           </InputGroup.Prepend>
 
           {this.state.showPasswordValidation || (
@@ -177,10 +187,12 @@ class Login extends Component {
           />
         </InputGroup>
 
+        {/* LOGIN SUBMIT */}
+
         <Link to={this.state.userLoggedIn ? "/" : "/login"}>
           <Button
             className="login-button"
-            disabled={!this.state.submitEnabled}
+            disabled={this.state.submitEnabled}
             onClick={this.submit}
             variant="primary"
           >
@@ -265,7 +277,7 @@ class Register extends Component {
 
   validateUsername = (e) => {
     this.setState({ 
-      input_userName: e.target.value,
+      userName: e.target.value,
       showUsernamevalidation: e.target.value.length > 3 ? false : true
     })
   }

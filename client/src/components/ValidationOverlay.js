@@ -16,7 +16,7 @@ export default class ValidationOverlay extends Component {
     const renderTooltip = (props) => (
       // TODO: Need to pass the validation message through props
       <Tooltip id="button-tooltip" {...props}>
-        some validation message
+        {this.props.validationMessage}
       </Tooltip>
     );
 
